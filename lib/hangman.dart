@@ -6,6 +6,7 @@ import 'package:hangman/on_screen_keyboard.dart';
 
 class Hangman extends StatefulWidget {
   const Hangman({super.key});
+  
 
   @override
   State<StatefulWidget> createState() {
@@ -37,7 +38,7 @@ class _HangmanState extends State<Hangman> {
     hideWord(word);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hangman'),
+        title: const Text('Hangman'),
       ),
       body: Column(
         children: [

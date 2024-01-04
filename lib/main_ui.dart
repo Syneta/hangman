@@ -2,14 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:hangman/data/words.dart';
-import 'package:hangman/hangman.dart';
+//import 'package:hangman/hangman.dart';
 import 'package:hangman/on_screen_keyboard.dart';
 
 final random = Random();
 
 class MainUi extends StatelessWidget {
   MainUi({super.key});
+  
   int ran = random.nextInt(6);
+ /*
   String getWord(List<String> wordList) {
     String word = wordList[random.nextInt(wordList.length)];
     return word;
@@ -26,7 +28,7 @@ class MainUi extends StatelessWidget {
 
   late String hangmanWord = getWord(wordList);
   late String hiddenWord = hideWord(hangmanWord);
-
+*/
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,13 +38,6 @@ class MainUi extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Image.asset(
-              'assets/images/hangman-$ran.png',
-              width: 400,
-            ),
-            const SizedBox(height: 20),
-            Text(hiddenWord.toUpperCase()),
-            const SizedBox(height: 20),
             const Keyboard(),
           ],
         ),
