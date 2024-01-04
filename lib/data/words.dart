@@ -5,4 +5,9 @@ const List<String> wordList = [
   'Sáttmáli',
   'Bíll',
   'Hús',
-];
+  'Rúm',
+  'Herðatré',
+  'Spilakassi',
+  'Tölvuleikur',
+  'Forritunarmál',
+  ];

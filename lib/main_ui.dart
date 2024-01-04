@@ -1,24 +1,51 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:hangman/data/words.dart';
 import 'package:hangman/hangman.dart';
 import 'package:hangman/on_screen_keyboard.dart';
 
+final random = Random();
+
 class MainUi extends StatelessWidget {
   MainUi({super.key});
+  int ran = random.nextInt(6);
+  String getWord(List<String> wordList) {
+    String word = wordList[random.nextInt(wordList.length)];
+    return word;
+  }
+
+  String hideWord(String word) {
+    int wordLength = word.length;
+    String hiddenWord = '';
+    for (int i = 0; i < wordLength; i++) {
+      hiddenWord = '_ ' * wordLength;
+    }
+    return hiddenWord;
+  }
+
+  late String hangmanWord = getWord(wordList);
+  late String hiddenWord = hideWord(hangmanWord);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Hangman'),
-      ),
-      body: Column(
-        children: [
-          Image.asset(
-            'assets/images/hangman-0',
-            width: 200,
-          ),
-          SizedBox(height: 20),
-        ],
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Hangman'),
+        ),
+        body: Column(
+          children: [
+            Image.asset(
+              'assets/images/hangman-$ran.png',
+              width: 400,
+            ),
+            const SizedBox(height: 20),
+            Text(hiddenWord.toUpperCase()),
+            const SizedBox(height: 20),
+            const Keyboard(),
+          ],
+        ),
       ),
     );
   }
