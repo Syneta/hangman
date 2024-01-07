@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hangman/data/words.dart';
+import 'package:hangman/word_generator.dart';
 
 Random random = Random();
 
@@ -16,7 +17,7 @@ class _KeyboardState extends State<Keyboard> {
 
   final List<String> _alphabet = 'AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ'.split('');
   final Set<String> _chosenCharacter = {};
-
+/*
   String _getWord(List<String> words) {
     String word = words[random.nextInt(words.length)];
     return word;
@@ -30,9 +31,10 @@ class _KeyboardState extends State<Keyboard> {
     }
     return hiddenWord;
   }
+*/
 
-  late final String _hangmanWord = _getWord(wordList);
-  late String _hiddenWord = _hideWord(_hangmanWord);
+  late final String _hangmanWord = getWord(wordList);
+  late String _hiddenWord = hideWord(_hangmanWord);
 
   void _onCharTap(String char) {
     setState(() {
@@ -41,8 +43,12 @@ class _KeyboardState extends State<Keyboard> {
       if (_hangmanWord.contains(char.toUpperCase())) {
         for (int i = 0; i < _hangmanWord.length; i++) {
           if (_hangmanWord[i] == char) {
-            _hiddenWord = _hiddenWord.replaceRange(i * 2, i * 2 + 1,
-                char); // use i * 2 as the start index and i * 2 + 1 as the end index
+            _hiddenWord = _hiddenWord.replaceRange(i * 2, i * 2 + 1, char); 
+          }
+          else if(wrongGuesses == 6){
+            setState(() {
+              
+            });
           }
         }
       } else {

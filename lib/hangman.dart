@@ -1,3 +1,5 @@
+/*
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -49,10 +51,9 @@ class _HangmanState extends State<Hangman> {
           const SizedBox(height: 20),
           Text(word),
           const SizedBox(height: 20),
-          
-
         ],
       ),
     );
   }
 }
+*/
