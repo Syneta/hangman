@@ -1,9 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:hangman/data/words.dart';
+//import 'package:hangman/welcome_screen.dart';
 import 'package:hangman/word_generator.dart';
+//import 'package:hangman/win_screen.dart';
+import 'package:hangman/loss_screen.dart';
+import 'package:hangman/main_ui.dart';
 
 Random random = Random();
+
+const welcomeRoute = '/home';
+const gameRoute = '/game';
+const lossRoute = '/loss';
+const winRoute = '/win';
 
 class Keyboard extends StatefulWidget {
   const Keyboard({super.key});
@@ -17,21 +26,6 @@ class _KeyboardState extends State<Keyboard> {
 
   final List<String> _alphabet = 'AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ'.split('');
   final Set<String> _chosenCharacter = {};
-/*
-  String _getWord(List<String> words) {
-    String word = words[random.nextInt(words.length)];
-    return word;
-  }
-
-  String _hideWord(String word) {
-    int wordLength = word.length;
-    String hiddenWord = '';
-    for (int i = 0; i < wordLength; i++) {
-      hiddenWord = '_ ' * wordLength;
-    }
-    return hiddenWord;
-  }
-*/
 
   late final String _hangmanWord = getWord(wordList);
   late String _hiddenWord = hideWord(_hangmanWord);
@@ -43,12 +37,7 @@ class _KeyboardState extends State<Keyboard> {
       if (_hangmanWord.contains(char.toUpperCase())) {
         for (int i = 0; i < _hangmanWord.length; i++) {
           if (_hangmanWord[i] == char) {
-            _hiddenWord = _hiddenWord.replaceRange(i * 2, i * 2 + 1, char); 
-          }
-          else if(wrongGuesses == 6){
-            setState(() {
-              
-            });
+            _hiddenWord = _hiddenWord.replaceRange(i * 2, i * 2 + 1, char);
           }
         }
       } else {
@@ -57,8 +46,52 @@ class _KeyboardState extends State<Keyboard> {
     });
   }
 
+  void tryAgain() {
+    setState(() {
+      wrongGuesses = 0;
+    });
+  }
+
+  void mainUI(BuildContext ctx) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return const MainUi();
+    }));
+  }
+/*
+  void winScreen(BuildContext ctx) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return WinScreen(onRestart: tryAgain);
+    }));
+  }
+*/
+  void lossScreen(BuildContext ctx) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return LossScreen(
+        word: _hangmanWord,
+      );
+    }));
+  }
+
+/*
+  void popScreen(BuildContext ctx) {
+    void popScreen(BuildContext ctx) {
+      Navigator.pop(ctx);
+      Navigator.popUntil(
+          ctx,
+          (route) => route
+              is KeyboardRoute); // Use the type of the route that shows the Keyboard widget
+    }
+  }
+*/
   @override
   Widget build(BuildContext context) {
+    if (wrongGuesses == 6) {
+      lossScreen(context);
+    }
+    if (_hangmanWord == _hiddenWord) {
+      Navigator.pushNamed(context, winRoute);
+    }
+
     return Column(
       children: [
         Image.asset(
