@@ -6,11 +6,7 @@ String getWord(List<String> words) {
   return word;
 }
 
-String hideWord(String word) {
-  int wordLength = word.length;
-  String hiddenWord = '';
-  for (int i = 0; i < wordLength; i++) {
-    hiddenWord = '_ ' * wordLength;
-  }
+List<String> hideWord(String word) {
+  List<String> hiddenWord = ('_ ' * word.length).split(' ');
   return hiddenWord;
 }

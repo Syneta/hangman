@@ -1,4 +1,5 @@
 const List<String> wordList = [
+  'BAR',
   'RÁÐGÁTA',
   'HÚSFÉLAG',
   'BÓNDABÝLI',

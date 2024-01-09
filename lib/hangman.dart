@@ -17,13 +17,14 @@ class HangmanGame extends StatefulWidget {
 
 class _HangmanGameState extends State<HangmanGame> {
   int wrongGuesses = 0;
+  int remainingGuesses = 6;
 
   final List<String> _alphabet = 'AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ'.split('');
   final Set<String> _chosenCharacter = {};
   final List<String> _wrongCharacter = [];
 
   late String hangmanWord = getWord(wordList);
-  late String hiddenWord = hideWord(hangmanWord);
+  late List hiddenWord = hideWord(hangmanWord);
 
   void _onCharTap(String char) {
     setState(() {
@@ -32,19 +33,28 @@ class _HangmanGameState extends State<HangmanGame> {
       if (hangmanWord.contains(char.toUpperCase())) {
         for (int i = 0; i < hangmanWord.length; i++) {
           if (hangmanWord[i] == char) {
-            hiddenWord = hiddenWord.replaceRange(i * 2, i * 2 + 1, char);
+            hiddenWord[i] = char;
+            //hiddenWord.replaceRange(i * 2, i * 2 + 1, char);
           }
         }
       } else {
         wrongGuesses++;
+        remainingGuesses--;
         _wrongCharacter.add(char.toUpperCase());
       }
     });
   }
 
-  /*
-  void winScreen() { 
-      showDialog(
+  /* void winScreen(BuildContext ctx) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return const WinScreen(
+        onPop: () {
+          Navigator.pop(context);
+        },
+      );
+    }));*/
+
+  /*showDialog(
         context: context,
         builder: (ctx) => AlertDialog(
             title: const Text('You win!'),
@@ -60,8 +70,7 @@ class _HangmanGameState extends State<HangmanGame> {
             ],
           ),
       );
-  }
-  */
+  }*/
 
   void lossScreen(BuildContext ctx) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
@@ -71,13 +80,19 @@ class _HangmanGameState extends State<HangmanGame> {
     }));
   }
 
+
   @override
   Widget build(BuildContext context) {
     if (wrongGuesses == 6) {
       lossScreen(context);
-    }else if()
-
-
+    }
+    if (hiddenWord.join('').toUpperCase() == hangmanWord.toUpperCase()) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        return WinScreen(onPop: () {
+          Navigator.pop(context);
+        });
+      }));
+    }
     return Column(
       children: [
         Image.asset(
@@ -86,7 +101,7 @@ class _HangmanGameState extends State<HangmanGame> {
         ),
         const SizedBox(height: 10),
         Text(
-          hiddenWord,
+          hiddenWord.join(' '),
           style: const TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -118,7 +133,7 @@ class _HangmanGameState extends State<HangmanGame> {
           }).toList(),
         ),
         Text(
-          'Ekki í orði: ${_wrongCharacter.join(', ')}',
+          'Tilraunir eftir: $remainingGuesses \nRangir Stafir:${_wrongCharacter.join(', ')}',
           style: const TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
