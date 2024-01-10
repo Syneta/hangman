@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:hangman/main_ui.dart';
-
+/*
+This is the opening screen with a start game button and
+ the rules for the game.
+*/
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({required this.startGame, super.key});
-
   final void Function() startGame;
 
   @override
@@ -17,18 +18,23 @@ class WelcomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 25),
           const Text(
-            'Velkominn í hengimann, gangi þér vel',
+            'Velkomin í hengimann, gangi þér vel',
             style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
           ),
           const SizedBox(height: 25),
           OutlinedButton(
             onPressed: () {
               startGame();
             },
-            child: const Text('Spila Leik'),
+            child: const Text(
+              'Spila Leik',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 30,
+                color: Colors.black,
+              ),
+            ),
           ),
           const Padding(
             padding: EdgeInsets.all(30.0),
