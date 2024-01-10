@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/data/words.dart';
-import 'package:hangman/loss_screen.dart';
 import 'package:hangman/word_generator.dart';
-import 'package:hangman/win_screen.dart';
 
 class HangmanGame extends StatefulWidget {
   const HangmanGame({super.key});
-
-  //final String guessWord;
 
   @override
   State<HangmanGame> createState() {
@@ -20,11 +16,22 @@ class _HangmanGameState extends State<HangmanGame> {
   int remainingGuesses = 6;
 
   final List<String> _alphabet = 'AÁBDÐEÉFGHIÍJKLMNOÓPRSTUÚVXYÝÞÆÖ'.split('');
-  final Set<String> _chosenCharacter = {};
-  final List<String> _wrongCharacter = [];
+  Set<String> _chosenCharacter = {};
+  List<String> _wrongCharacter = [];
 
   late String hangmanWord = getWord(wordList);
   late List hiddenWord = hideWord(hangmanWord);
+
+  void onRestartGame() {
+    setState(() {
+      hangmanWord = getWord(wordList);
+      hiddenWord = hideWord(hangmanWord);
+      _chosenCharacter = {};
+      _wrongCharacter = [];
+      wrongGuesses = 0;
+      remainingGuesses = 6;
+    });
+  }
 
   void _onCharTap(String char) {
     setState(() {
@@ -34,7 +41,6 @@ class _HangmanGameState extends State<HangmanGame> {
         for (int i = 0; i < hangmanWord.length; i++) {
           if (hangmanWord[i] == char) {
             hiddenWord[i] = char;
-            //hiddenWord.replaceRange(i * 2, i * 2 + 1, char);
           }
         }
       } else {
@@ -45,33 +51,6 @@ class _HangmanGameState extends State<HangmanGame> {
     });
   }
 
-  /* void winScreen(BuildContext ctx) {
-    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
-      return const WinScreen(
-        onPop: () {
-          Navigator.pop(context);
-        },
-      );
-    }));*/
-
-  /*showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-            title: const Text('You win!'),
-            content:
-                const Text('Congratulations, you guessed the word correctly.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(ctx);
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          ),
-      );
-  }*/
-
   void lossScreen(BuildContext ctx) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
       return LossScreen(
@@ -80,18 +59,58 @@ class _HangmanGameState extends State<HangmanGame> {
     }));
   }
 
-
   @override
   Widget build(BuildContext context) {
     if (wrongGuesses == 6) {
-      lossScreen(context);
+      Future.delayed(Duration.zero, () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Tapari'),
+              content: Text('Því miður ertu tapari\nRétt orð: $hangmanWord'),
+              actions: <Widget>[
+                OutlinedButton(
+                  child: const Text('Aftur'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    onRestartGame();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      });
     }
     if (hiddenWord.join('').toUpperCase() == hangmanWord.toUpperCase()) {
-      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      Future.delayed(Duration.zero, () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Sigurvegari'),
+              content: const Text('Rétt, þú vinnur'),
+              actions: <Widget>[
+                OutlinedButton(
+                  child: const Text('Aftur'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    onRestartGame();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      });
+
+      /*Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+
         return WinScreen(onPop: () {
           Navigator.pop(context);
         });
-      }));
+      }));*/
     }
     return Column(
       children: [
